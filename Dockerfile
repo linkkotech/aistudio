@@ -8,9 +8,19 @@ RUN bun install --frozen-lockfile
 
 # 2. Build
 ENV NODE_ENV=production
-# CORREÇÃO AQUI: Usando bunx drizzle-kit generate diretamente
+
+# VARIÁVEIS "FAKE" PARA O BUILD PASSAR
+# O Next.js exige que elas existam na compilação, mas não precisa conectar de verdade agora.
+ENV DATABASE_URL="postgresql://postgres:password@localhost:5432/db"
+ENV BETTER_AUTH_SECRET="secret_placeholder_for_build"
+ENV BETTER_AUTH_URL="http://localhost:3000"
+# Pede para o T3 env (se usado) pular a validação rigorosa
+ENV SKIP_ENV_VALIDATION=true
+ENV SKIP_ENV_CHECK=true
+
+# Gera arquivos do Drizzle
 RUN cd packages/db && bunx drizzle-kit generate
-# Build do app principal
+# Build apenas do App Sim
 RUN bunx turbo run build --filter=sim
 
 # 3. Runner
@@ -33,5 +43,5 @@ ENV HOSTNAME="0.0.0.0"
 
 EXPOSE 3000
 
-# CORREÇÃO AQUI: Usando bunx drizzle-kit push no start
+# Script de inicialização
 CMD ["sh", "-c", "cd packages/db && bunx drizzle-kit push && cd ../../apps/sim && bun run start"]

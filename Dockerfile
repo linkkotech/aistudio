@@ -14,6 +14,11 @@ ENV NODE_ENV=production
 ENV DATABASE_URL="postgresql://postgres:password@localhost:5432/db"
 ENV BETTER_AUTH_SECRET="secret_placeholder_for_build"
 ENV BETTER_AUTH_URL="http://localhost:3000"
+
+# Essencial para o build
+ARG NEXT_PUBLIC_APP_URL
+ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
+
 # Pede para o T3 env (se usado) pular a validação rigorosa
 ENV SKIP_ENV_VALIDATION=true
 ENV SKIP_ENV_CHECK=true

@@ -11,7 +11,7 @@ ENV NODE_ENV=production
 # CORREÇÃO AQUI: Usando bunx drizzle-kit generate diretamente
 RUN cd packages/db && bunx drizzle-kit generate
 # Build do app principal
-RUN bun run build
+RUN bunx turbo run build --filter=sim
 
 # 3. Runner
 FROM oven/bun:1 AS release
